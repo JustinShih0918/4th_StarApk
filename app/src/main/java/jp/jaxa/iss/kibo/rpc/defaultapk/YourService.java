@@ -157,7 +157,6 @@ public class YourService extends KiboRpcService {
                         phase++;
                     } else {
                         move(currentStep, 8);
-                        api.reportMissionCompletion(qr);
                     }
                 } else if (TravelTime[currentStep][active_targets.get(0)] > time.get(0)) {
                     if (TravelTime[currentStep][8] < time.get(1) - time.get(0)) {
@@ -168,7 +167,6 @@ public class YourService extends KiboRpcService {
                         phase++;
                     } else {
                         move(currentStep, 8);
-                        api.reportMissionCompletion(qr);
                     }
                 }
             } else if (active_targets.size() == 2) {
@@ -212,12 +210,10 @@ public class YourService extends KiboRpcService {
                                 phase++;
                             } else {
                                 move(currentStep, 8);
-                                api.reportMissionCompletion(qr);
                             }
                         }
                     } else {
                         move(currentStep, 8);
-                        api.reportMissionCompletion(qr);
                     }
                 } else if (TravelTime[currentStep][active_targets.get(1)] > TravelTime[currentStep][active_targets.get(0)] && (TravelTime[currentStep][active_targets.get(0)] + TravelTime[active_targets.get(1)][active_targets.get(0)]) < time.get(0)) {
                     if (TravelTime[currentStep][active_targets.get(0)] + TravelTime[active_targets.get(0)][8] < time.get(1)) {
@@ -259,12 +255,10 @@ public class YourService extends KiboRpcService {
                                 phase++;
                             } else {
                                 move(currentStep, 8);
-                                api.reportMissionCompletion(qr);
                             }
                         }
                     } else {
                         move(currentStep, 8);
-                        api.reportMissionCompletion(qr);
                     }
                 } else if (TravelTime[currentStep][active_targets.get(1)] < TravelTime[currentStep][active_targets.get(0)] && (TravelTime[currentStep][active_targets.get(1)]) < time.get(0)) {
                     if (TravelTime[currentStep][active_targets.get(1)] + TravelTime[active_targets.get(1)][8] < time.get(1)) {
@@ -290,11 +284,9 @@ public class YourService extends KiboRpcService {
                             phase++;
                         } else {
                             move(currentStep, 8);
-                            api.reportMissionCompletion(qr);
                         }
                     } else {
                         move(currentStep, 8);
-                        api.reportMissionCompletion(qr);
                     }
                 } else if (TravelTime[currentStep][active_targets.get(1)] > TravelTime[currentStep][active_targets.get(0)] && (TravelTime[currentStep][active_targets.get(0)]) < time.get(0)) {
                     if (TravelTime[currentStep][active_targets.get(0)] + TravelTime[active_targets.get(0)][8] < time.get(1)) {
@@ -320,11 +312,9 @@ public class YourService extends KiboRpcService {
                             phase++;
                         } else {
                             move(currentStep, 8);
-                            api.reportMissionCompletion(qr);
                         }
                     } else {
                         move(currentStep, 8);
-                        api.reportMissionCompletion(qr);
                     }
                 }
             } else if (active_targets.size() == 3) {
@@ -405,7 +395,6 @@ public class YourService extends KiboRpcService {
                                     phase++;
                                 } else {
                                     move(currentStep, 8);
-                                    api.reportMissionCompletion(qr);
                                 }
                             } else if (TravelTime[currentStep][8] < time.get(1) - time.get(0)) {
                                 try {
@@ -415,7 +404,6 @@ public class YourService extends KiboRpcService {
                                 phase++;
                             } else {
                                 move(currentStep, 8);
-                                api.reportMissionCompletion(qr);
                             }
                         }
                     } else if (TravelTime[currentStep][8] < time.get(1) - time.get(0)) {
@@ -426,11 +414,9 @@ public class YourService extends KiboRpcService {
                         phase++;
                     } else {
                         move(currentStep, 8);
-                        api.reportMissionCompletion(qr);
                     }
                 } else {
                     move(currentStep, 8);
-                    api.reportMissionCompletion(qr);
                 }
             }
         }
@@ -667,7 +653,7 @@ public class YourService extends KiboRpcService {
             waiting();
             api.notifyGoingToGoal();
             api.moveTo(P_Goal, Q_Goal, false);
-            api.reportMissionCompletion("NO_PROBLEM");
+            api.reportMissionCompletion(qr);
         } else if (start == 3 && end == 1){
             api.moveTo(OneToThree, Q1, false);
             waiting();
@@ -717,7 +703,7 @@ public class YourService extends KiboRpcService {
         } else if (start == 3 && end == 8){           //goal
             api.notifyGoingToGoal();
             api.moveTo(P_Goal, Q_Goal, false);
-            api.reportMissionCompletion("NO_PROBLEM");
+            api.reportMissionCompletion(qr);
         } else if (start == 4 && end == 1){
             api.moveTo(AP1, Q1, false);
             waiting();
@@ -761,7 +747,7 @@ public class YourService extends KiboRpcService {
         } else if (start == 4 && end == 8){           //goal
             api.notifyGoingToGoal();
             api.moveTo(P_Goal, Q_Goal, false);
-            api.reportMissionCompletion("NO_PROBLEM");
+            api.reportMissionCompletion(qr);
         } else if (start == 5 && end == 1){
             api.moveTo(AP1, Q1, false);
             waiting();
@@ -807,7 +793,7 @@ public class YourService extends KiboRpcService {
             api.moveTo(new Point(11.12, -7.52, 5.3393), Q5, false);
             api.notifyGoingToGoal();
             api.moveTo(P_Goal, Q_Goal, false);
-            api.reportMissionCompletion("NO_PROBLEM");
+            api.reportMissionCompletion(qr);
         } else if (start == 6 && end == 1){
             api.moveTo(AP1, Q1, false);
             waiting();
@@ -850,7 +836,7 @@ public class YourService extends KiboRpcService {
             api.moveTo(new Point(11.15,-7.54,4.9), Q6, false);
             api.notifyGoingToGoal();
             api.moveTo(P_Goal, Q_Goal, false);
-            api.reportMissionCompletion("NO_PROBLEM");
+            api.reportMissionCompletion(qr);
         } else if (start == 7 && end == 1){
             api.moveTo(P1, Q1, false);
             waiting();
@@ -925,7 +911,7 @@ public class YourService extends KiboRpcService {
             api.moveTo(new Point(11.12, -7.52, 5.3393), Q5, false);
             api.notifyGoingToGoal();
             api.moveTo(P_Goal, Q_Goal, false);
-            api.reportMissionCompletion("NO_PROBLEM");
+            api.reportMissionCompletion(qr);
         }
     }
 
