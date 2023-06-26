@@ -112,15 +112,26 @@ public class YourService extends KiboRpcService {
     List<Integer> active_targets = new ArrayList<>();
     double score[] = {0, 30, 20, 40, 20, 30, 30, 50};
 
-    Long TravelTime[][] = {
-            /*0*/ {1000000L, 53328L, 31640L, 68144L, 69840L, 59360L, 45920L, 51920L, 1000000L},
-            /*1*/ {53328L, 1000000L, 34984L, 46608L, 43960L, 32896L, 21104L, 27104L, 53016L},
-            /*2*/ {31640L, 35040L, 1000000L, 50952L, 49480L, 41208L, 30520L, 36520L, 50504L},
-            /*3*/ {68144L, 46704L, 50976L, 1000000L, 40280L, 54088L, 43696L, 49696L, 23789L},
-            /*4*/ {69840L, 39256L, 49552L, 40880L, 1000000L, 29040L, 53088L, 59088L, 16244L},  // 4-6 有改
-            /*5*/ {59360L, 30248L, 50736L, 52528L, 29192L, 1000000L, 39184L, 45184L, 34864L},
-            /*6*/ {45920L, 24120L, 28272L, 40152L, 56048L, 34832L, 1000000L, 6000L, 46760L},  // 6-4  有改
-            /*7*/ {45920L, 24120L, 28272L, 40152L, 56048L, 34832L, 6000L, 1000000L, 46760L},
+//    Long TravelTime[][] = {          // 原版
+//            /*0*/ {1000000L, 53328L, 31640L, 68144L, 69840L, 59360L, 45920L, 51920L, 1000000L},
+//            /*1*/ {53328L, 1000000L, 34984L, 46608L, 43960L, 32896L, 21104L, 27104L, 53016L},
+//            /*2*/ {31640L, 35040L, 1000000L, 50952L, 49480L, 41208L, 30520L, 36520L, 50504L},
+//            /*3*/ {68144L, 46704L, 50976L, 1000000L, 40280L, 54088L, 43696L, 49696L, 23789L},
+//            /*4*/ {69840L, 39256L, 49552L, 40880L, 1000000L, 29040L, 53088L, 59088L, 16244L},  // 4-6 有改
+//            /*5*/ {59360L, 30248L, 50736L, 52528L, 29192L, 1000000L, 39184L, 45184L, 34864L},
+//            /*6*/ {45920L, 24120L, 28272L, 40152L, 56048L, 34832L, 1000000L, 6000L, 46760L},  // 6-4  有改
+//            /*7*/ {45920L, 24120L, 28272L, 40152L, 56048L, 34832L, 6000L, 1000000L, 46760L},
+//    };
+
+    Long TravelTime[][] = {            // + 2 秒
+            /*0*/ {1000000L, 55328L, 33640L, 70144L, 71840L, 61360L, 47920L, 53920L, 1000000L},
+            /*1*/ {55328L, 1000000L, 36984L, 48608L, 45960L, 34896L, 23104L, 29104L, 55016L},
+            /*2*/ {33640L, 37040L, 1000000L, 52952L, 51480L, 43208L, 32520L, 38520L, 52504L},
+            /*3*/ {70144L, 48704L, 52976L, 1000000L, 42280L, 56088L, 45696L, 51696L, 25789L},
+            /*4*/ {71840L, 41256L, 51552L, 42880L, 1000000L, 31040L, 55088L, 61088L, 18244L},  // 4-6 有改
+            /*5*/ {61360L, 32248L, 52736L, 54528L, 31192L, 1000000L, 41184L, 47184L, 36864L},
+            /*6*/ {47920L, 26120L, 30272L, 42152L, 58048L, 36832L, 1000000L, 6000L, 48760L},  // 6-4  有改
+            /*7*/ {47920L, 26120L, 30272L, 42152L, 58048L, 36832L, 6000L, 1000000L, 48760L},
     };
 
     String qr = "";
@@ -223,19 +234,23 @@ public class YourService extends KiboRpcService {
                 } else if (TravelTime[currentStep][active_targets.get(1)] + TravelTime[active_targets.get(1)][8] < api.getTimeRemaining().get(1) && TravelTime[currentStep][active_targets.get(0)] + TravelTime[active_targets.get(0)][8] < api.getTimeRemaining().get(1)) {
                     if (score[active_targets.get(1)] > score[active_targets.get(0)]) {
                         move(currentStep, active_targets.get(1));
+                        currentStep = active_targets.get(1);
                         return true;
 
                     } else {
                         move(currentStep, active_targets.get(0));
+                        currentStep = active_targets.get(0);
                         return true;
                     }
 
                 } else if (TravelTime[currentStep][active_targets.get(1)] + TravelTime[active_targets.get(1)][8]< api.getTimeRemaining().get(1)) {
                     move(currentStep, active_targets.get(1));
+                    currentStep = active_targets.get(1);
                     return true;
 
                 } else if (TravelTime[currentStep][active_targets.get(0)] + TravelTime[active_targets.get(0)][8]< api.getTimeRemaining().get(1)) {
                     move(currentStep, active_targets.get(0));
+                    currentStep = active_targets.get(0);
                     return true;
 
                 } else {
@@ -257,18 +272,22 @@ public class YourService extends KiboRpcService {
                 } else if (TravelTime[currentStep][active_targets.get(1)] + TravelTime[active_targets.get(1)][8] < api.getTimeRemaining().get(1) && TravelTime[currentStep][active_targets.get(0)] + TravelTime[active_targets.get(0)][8] < api.getTimeRemaining().get(1)) {
                     if (score[active_targets.get(1)] > score[active_targets.get(0)]) {
                         move(currentStep, active_targets.get(1));
+                        currentStep = active_targets.get(1);
                         return true;
                     } else {
                         move(currentStep, active_targets.get(0));
+                        currentStep = active_targets.get(0);
                         return true;
                     }
 
                 } else if (TravelTime[currentStep][active_targets.get(0)] + TravelTime[active_targets.get(0)][8]< api.getTimeRemaining().get(1)) {
                     move(currentStep, active_targets.get(0));
+                    currentStep = active_targets.get(0);
                     return true;
 
                 } else if (TravelTime[currentStep][active_targets.get(1)] + TravelTime[active_targets.get(1)][8]< api.getTimeRemaining().get(1)) {
                     move(currentStep, active_targets.get(1));
+                    currentStep = active_targets.get(1);
                     return true;
 
                 } else {
@@ -282,12 +301,52 @@ public class YourService extends KiboRpcService {
     public boolean target_3(){
         boolean isDone = false;
 
-        if (active_targets.get(2) == 6 && !hasScan){
-            active_targets.set(2, 7);
+        if (active_targets.get(2)==6 && !hasScan){
+            active_targets.set(2, 7);    // turn six into sixQR
 
+            List<ThreeJudge> SixQR = new ArrayList<>();
+
+            ThreeJudge a = new ThreeJudge(active_targets.get(0), active_targets.get(1), active_targets.get(2), TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)]);
+            ThreeJudge b = new ThreeJudge(active_targets.get(0), active_targets.get(2), active_targets.get(1), TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)]);
+            ThreeJudge c = new ThreeJudge(active_targets.get(1), active_targets.get(0), active_targets.get(2), TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)]);
+            ThreeJudge d = new ThreeJudge(active_targets.get(1), active_targets.get(2), active_targets.get(0), TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(0)]);
+            ThreeJudge e = new ThreeJudge(active_targets.get(2), active_targets.get(0), active_targets.get(1), TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)]);
+            ThreeJudge f = new ThreeJudge(active_targets.get(2), active_targets.get(1), active_targets.get(0), TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)]);
+
+            SixQR.add(a);
+            SixQR.add(b);
+            SixQR.add(c);
+            SixQR.add(d);
+            SixQR.add(e);
+            SixQR.add(f);
+
+            active_targets.set(2, 6);
+
+            for(int i=5; i>=0; i--){
+                if(SixQR.get(i).time >= api.getTimeRemaining().get(0) || SixQR.get(i).time + TravelTime[SixQR.get(i).pt3][8] > api.getTimeRemaining().get(1)){
+                    SixQR.remove(i);
+                }
+            }
+
+            if (SixQR.size() > 0){
+
+                SixQR.sort(new ThreeJudgeComparator());
+                move(currentStep, SixQR.get(0).pt1);
+                move(SixQR.get(0).pt1, SixQR.get(0).pt2);
+                move(SixQR.get(0).pt2, SixQR.get(0).pt3);
+                currentStep = SixQR.get(0).pt3;
+                isDone = true;
+                hasScan = true;
+
+                return true;
+            }
+        }
+
+        if (!isDone){
             List<ThreeJudge> goThree = new ArrayList<>();
             List<ThreeJudge> goTwo = new ArrayList<>();
             List<ThreeJudge> goOne = new ArrayList<>();
+
             ThreeJudge a = new ThreeJudge(active_targets.get(0), active_targets.get(1), active_targets.get(2), TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)]);
             ThreeJudge b = new ThreeJudge(active_targets.get(0), active_targets.get(2), active_targets.get(1), TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)]);
             ThreeJudge c = new ThreeJudge(active_targets.get(1), active_targets.get(0), active_targets.get(2), TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)]);
@@ -324,523 +383,377 @@ public class YourService extends KiboRpcService {
 
 
             } else {
-                //  choose 2 from 3，時間內只能從 phase 中的 3 個點挑 2 個出來走
-                a.time = TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)];
-                b.time = TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)];
-                c.time = TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)];
-                d.time = TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)];
-                e.time = TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(0)];
-                f.time = TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)];
+                // choose 2 from 3
+                if (active_targets.get(2)==6 && !hasScan){
+                    active_targets.set(2, 7);
 
-                goTwo.add(a);
-                goTwo.add(b);
-                goTwo.add(c);
-                goTwo.add(d);
-                goTwo.add(e);
-                goTwo.add(f);
+                    // goTwo, contain sixQR
 
+                    a.time = TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)];
+                    b.time = TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)];
+                    c.time = TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)];
+                    d.time = TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)];
+                    e.time = TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(0)];
+                    f.time = TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)];
 
+                    goTwo.add(b);
+                    goTwo.add(d);
+                    goTwo.add(e);
+                    goTwo.add(f);
 
+                    for(int i=5; i>=0; i--){
+                        if (goTwo.get(i).time + TravelTime[goTwo.get(i).pt2][8] > api.getTimeRemaining().get(1)){
+                            goTwo.remove(i);
+                        }
+                    }
 
-                for(int i=5; i>=0; i--){
-                    if (goTwo.get(i).time + TravelTime[goTwo.get(i).pt2][8] > api.getTimeRemaining().get(1)){
-                        goTwo.remove(i);
+                    if(goTwo.size()>0){
+                        List<ThreeJudge> ninty = new ArrayList<>();
+                        List<ThreeJudge> eighty = new ArrayList<>();
+                        List<ThreeJudge> seventy = new ArrayList<>();
+
+                        for (int i=0; i<goTwo.size(); i++){
+                            if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 90){
+                                ninty.add(goTwo.get(i));
+                            } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 80){
+                                eighty.add(goTwo.get(i));
+                            } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 70){
+                                seventy.add(goTwo.get(i));
+                            }
+                        }
+
+                        if (ninty.size() > 0){
+                            ninty.sort(new ThreeJudgeComparator());
+
+                            for (int i=0; i<7; i++){
+                                if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)){
+                                    if (120000 + TravelTime[ninty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)){
+                                        move(currentStep, ninty.get(0).pt1);
+                                        move(ninty.get(0).pt1, ninty.get(0).pt2);
+                                        currentStep = ninty.get(0).pt2;
+                                        isDone = true;
+                                        hasScan = true;
+                                        while (api.getTimeRemaining().get(0) < 119000){
+                                            waiting(10);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            move(currentStep, ninty.get(0).pt1);
+                            move(ninty.get(0).pt1, ninty.get(0).pt2);
+                            currentStep = ninty.get(0).pt2;
+                            isDone = true;
+                            hasScan = true;
+                            return true;
+
+                        } else if (eighty.size() > 0){
+                            eighty.sort(new ThreeJudgeComparator());
+
+                            for (int i=0; i<7; i++) {
+                                if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
+                                    if (120000 + TravelTime[eighty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
+                                        move(currentStep, eighty.get(0).pt1);
+                                        move(eighty.get(0).pt1, eighty.get(0).pt2);
+                                        currentStep = eighty.get(0).pt2;
+                                        isDone = true;
+                                        hasScan = true;
+                                        while (api.getTimeRemaining().get(0) < 119000){
+                                            waiting(10);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            move(currentStep, eighty.get(0).pt1);
+                            move(eighty.get(0).pt1, eighty.get(0).pt2);
+                            currentStep = eighty.get(0).pt2;
+                            isDone = true;
+                            hasScan = true;
+                            return true;
+
+                        } else if (seventy.size() > 0){
+                            seventy.sort(new ThreeJudgeComparator());
+
+                            for (int i=0; i<7; i++){
+                                if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)){
+                                    if (120000 + TravelTime[seventy.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)){
+                                        move(currentStep, seventy.get(0).pt1);
+                                        move(seventy.get(0).pt1, seventy.get(0).pt2);
+                                        currentStep = seventy.get(0).pt2;
+                                        isDone = true;
+                                        hasScan = true;
+                                        while (api.getTimeRemaining().get(0) < 119000){
+                                            waiting(10);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            move(currentStep, seventy.get(0).pt1);
+                            move(seventy.get(0).pt1, seventy.get(0).pt2);
+                            currentStep = seventy.get(0).pt2;
+                            isDone = true;
+                            hasScan = true;
+                            return true;
+                        }
                     }
                 }
 
-                if(goTwo.size()>0){
-                    List<ThreeJudge> ninty = new ArrayList<>();
-                    List<ThreeJudge> eighty = new ArrayList<>();
-                    List<ThreeJudge> seventy = new ArrayList<>();
-                    List<ThreeJudge> sixty = new ArrayList<>();
-                    List<ThreeJudge> fifty = new ArrayList<>();
-                    List<ThreeJudge> forty = new ArrayList<>();
+                if (!isDone){
+                    // goTwo
+                    // choose 2 from 3，時間內只能從 phase 中的 3 個點挑 2 個出來走
+                    a.time = TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)];
+                    b.time = TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)];
+                    c.time = TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)];
+                    d.time = TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)];
+                    e.time = TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(0)];
+                    f.time = TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)];
 
-                    for (int i=0; i<goTwo.size(); i++){
-                        if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 90){
-                            ninty.add(goTwo.get(i));
-                        } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 80){
-                            eighty.add(goTwo.get(i));
-                        } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 70){
-                            seventy.add(goTwo.get(i));
-                        } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 60){
-                            sixty.add(goTwo.get(i));
-                        } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 50){
-                            fifty.add(goTwo.get(i));
-                        } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 40){
-                            forty.add(goTwo.get(i));
+                    goTwo.add(a);
+                    goTwo.add(b);
+                    goTwo.add(c);
+                    goTwo.add(d);
+                    goTwo.add(e);
+                    goTwo.add(f);
+
+                    for(int i=5; i>=0; i--){
+                        if (goTwo.get(i).time + TravelTime[goTwo.get(i).pt2][8] > api.getTimeRemaining().get(1)){
+                            goTwo.remove(i);
                         }
                     }
 
-                    if (ninty.size() > 0){
-                        ninty.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++){
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)){
-                                if (120000 + TravelTime[ninty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)){
-                                    move(currentStep, ninty.get(0).pt1);
-                                    move(ninty.get(0).pt1, ninty.get(0).pt2);
-                                    currentStep = ninty.get(0).pt2;
-                                    isDone = true;
-                                    if (!hasScan && TravelTime[currentStep][7] < api.getTimeRemaining().get(0) && TravelTime[6][8] < api.getTimeRemaining().get(1)-api.getTimeRemaining().get(0)){
-                                        move(currentStep, 7);
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    } else {
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
-
-                        move(currentStep, ninty.get(0).pt1);
-                        move(ninty.get(0).pt1, ninty.get(0).pt2);
-                        currentStep = ninty.get(0).pt2;
-                        isDone = true;
-                        return false;
-
-                    } else if (eighty.size() > 0){
-                        eighty.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++) {
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
-                                if (120000 + TravelTime[eighty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
-                                    move(currentStep, eighty.get(0).pt1);
-                                    move(eighty.get(0).pt1, eighty.get(0).pt2);
-                                    currentStep = eighty.get(0).pt2;
-                                    isDone = true;
-                                    if (!hasScan && TravelTime[currentStep][7] < api.getTimeRemaining().get(0) && TravelTime[6][8] < api.getTimeRemaining().get(1)-api.getTimeRemaining().get(0)){
-                                        move(currentStep, 7);
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    } else {
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
-
-                        move(currentStep, eighty.get(0).pt1);
-                        move(eighty.get(0).pt1, eighty.get(0).pt2);
-                        currentStep = eighty.get(0).pt2;
-                        isDone = true;
-                        return false;
-                    } else if (seventy.size() > 0){
-                        seventy.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++){
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)){
-                                if (120000 + TravelTime[seventy.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)){
-                                    move(currentStep, seventy.get(0).pt1);
-                                    move(seventy.get(0).pt1, seventy.get(0).pt2);
-                                    currentStep = seventy.get(0).pt2;
-                                    isDone = true;
-                                    if (!hasScan && TravelTime[currentStep][7] < api.getTimeRemaining().get(0) && TravelTime[6][8] < api.getTimeRemaining().get(1)-api.getTimeRemaining().get(0)){
-                                        move(currentStep, 7);
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    } else {
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
-
-                        move(currentStep, seventy.get(0).pt1);
-                        move(seventy.get(0).pt1, seventy.get(0).pt2);
-                        currentStep = seventy.get(0).pt2;
-                        isDone = true;
-                        return false;
-
-                    } else if (sixty.size() > 0){
-                        sixty.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++) {
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
-                                if (120000 + TravelTime[sixty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
-                                    move(currentStep, sixty.get(0).pt1);
-                                    move(sixty.get(0).pt1, sixty.get(0).pt2);
-                                    currentStep = sixty.get(0).pt2;
-                                    isDone = true;
-                                    if (!hasScan && TravelTime[currentStep][7] < api.getTimeRemaining().get(0) && TravelTime[6][8] < api.getTimeRemaining().get(1)-api.getTimeRemaining().get(0)){
-                                        move(currentStep, 7);
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    } else {
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
-
-                        move(currentStep, sixty.get(0).pt1);
-                        move(sixty.get(0).pt1, sixty.get(0).pt2);
-                        currentStep = sixty.get(0).pt2;
-                        isDone = true;
-                        return false;
-                    } else if (fifty.size() > 0){
-                        fifty.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++) {
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
-                                if (120000 + TravelTime[fifty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
-                                    move(currentStep, fifty.get(0).pt1);
-                                    move(fifty.get(0).pt1, fifty.get(0).pt2);
-                                    currentStep = fifty.get(0).pt2;
-                                    isDone = true;
-                                    if (!hasScan && TravelTime[currentStep][7] < api.getTimeRemaining().get(0) && TravelTime[6][8] < api.getTimeRemaining().get(1)-api.getTimeRemaining().get(0)){
-                                        move(currentStep, 7);
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    } else {
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
-
-                        move(currentStep, fifty.get(0).pt1);
-                        move(fifty.get(0).pt1, fifty.get(0).pt2);
-                        currentStep = fifty.get(0).pt2;
-                        isDone = true;
-                        return false;
-                    } else if (forty.size() > 0){
-                        forty.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++) {
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
-                                if (120000 + TravelTime[forty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
-                                    move(currentStep, forty.get(0).pt1);
-                                    move(forty.get(0).pt1, forty.get(0).pt2);
-                                    currentStep = forty.get(0).pt2;
-                                    isDone = true;
-                                    if (!hasScan && TravelTime[currentStep][7] < api.getTimeRemaining().get(0) && TravelTime[6][8] < api.getTimeRemaining().get(1)-api.getTimeRemaining().get(0)){
-                                        move(currentStep, 7);
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    } else {
-                                        while (api.getTimeRemaining().get(0) < 119000){
-                                            waiting(10);
-                                        }
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
-
-                        move(currentStep, forty.get(0).pt1);
-                        move(forty.get(0).pt1, forty.get(0).pt2);
-                        currentStep = forty.get(0).pt2;
-                        isDone = true;
-                        return false;
-                    }
-                } else {
-                    // choose 1 from 3
-                    // 這裡沒有加上時間
-
-                    a.time = TravelTime[currentStep][active_targets.get(0)];
-                    c.time = TravelTime[currentStep][active_targets.get(1)];
-                    e.time = TravelTime[currentStep][active_targets.get(2)];
-
-                    goOne.add(a);
-                    goOne.add(c);
-                    goOne.add(e);
-
-                    for(int i=2; i>=0; i--){
-                        if (goOne.get(i).time + TravelTime[goOne.get(i).pt1][8] > api.getTimeRemaining().get(1)){  // && 120000 + TravelTime[goTwo.get(i).pt2][8] > api.getTimeRemaining().get(1)){
-                            goOne.remove(i);
-                        }
-                    }
-
-                    if (goOne.size() > 0){
+                    if(goTwo.size()>0){
+                        List<ThreeJudge> seventy = new ArrayList<>();
+                        List<ThreeJudge> sixty = new ArrayList<>();
+                        List<ThreeJudge> fifty = new ArrayList<>();
                         List<ThreeJudge> forty = new ArrayList<>();
-                        List<ThreeJudge> thirty = new ArrayList<>();
-                        List<ThreeJudge> twenty = new ArrayList<>();
 
-                        for (int i=0; i<2; i++){
-                            if (score[active_targets.get(i)] == 40){
-                                forty.add(goOne.get(i));
-                            } else if (score[active_targets.get(i)] == 30){
-                                thirty.add(goOne.get(i));
-                            } else if (score[active_targets.get(i)] == 20){
-                                twenty.add(goOne.get(i));
+                        for (int i=0; i<goTwo.size(); i++){
+                            if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 70){
+                                seventy.add(goTwo.get(i));
+                            } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 60){
+                                sixty.add(goTwo.get(i));
+                            } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 50){
+                                fifty.add(goTwo.get(i));
+                            } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 40){
+                                forty.add(goTwo.get(i));
                             }
                         }
-                        if (forty.size() > 0){
+
+                        if (seventy.size() > 0){
+                            seventy.sort(new ThreeJudgeComparator());
+
+                            for (int i=0; i<7; i++){
+                                if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)){
+                                    if (120000 + TravelTime[seventy.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)){
+                                        move(currentStep, seventy.get(0).pt1);
+                                        move(seventy.get(0).pt1, seventy.get(0).pt2);
+                                        currentStep = seventy.get(0).pt2;
+                                        while (api.getTimeRemaining().get(0) < 119000){
+                                            waiting(10);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            move(currentStep, seventy.get(0).pt1);
+                            move(seventy.get(0).pt1, seventy.get(0).pt2);
+                            currentStep = seventy.get(0).pt2;
+                            return true;
+
+                        } else if (sixty.size() > 0){
+                            sixty.sort(new ThreeJudgeComparator());
+
+                            for (int i=0; i<7; i++) {
+                                if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
+                                    if (120000 + TravelTime[sixty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
+                                        move(currentStep, sixty.get(0).pt1);
+                                        move(sixty.get(0).pt1, sixty.get(0).pt2);
+                                        currentStep = sixty.get(0).pt2;
+                                        while (api.getTimeRemaining().get(0) < 119000){
+                                            waiting(10);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            move(currentStep, sixty.get(0).pt1);
+                            move(sixty.get(0).pt1, sixty.get(0).pt2);
+                            currentStep = sixty.get(0).pt2;
+                            return true;
+                        } else if (fifty.size() > 0){
+                            fifty.sort(new ThreeJudgeComparator());
+
+                            for (int i=0; i<7; i++) {
+                                if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
+                                    if (120000 + TravelTime[fifty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
+                                        move(currentStep, fifty.get(0).pt1);
+                                        move(fifty.get(0).pt1, fifty.get(0).pt2);
+                                        currentStep = fifty.get(0).pt2;
+                                        while (api.getTimeRemaining().get(0) < 119000){
+                                            waiting(10);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+
+                            move(currentStep, fifty.get(0).pt1);
+                            move(fifty.get(0).pt1, fifty.get(0).pt2);
+                            currentStep = fifty.get(0).pt2;
+                            return true;
+                        } else if (forty.size() > 0){
                             forty.sort(new ThreeJudgeComparator());
+
+                            for (int i=0; i<7; i++) {
+                                if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
+                                    if (120000 + TravelTime[forty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
+                                        move(currentStep, forty.get(0).pt1);
+                                        move(forty.get(0).pt1, forty.get(0).pt2);
+                                        currentStep = forty.get(0).pt2;
+                                        while (api.getTimeRemaining().get(0) < 119000){
+                                            waiting(10);
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+
                             move(currentStep, forty.get(0).pt1);
-                            currentStep = forty.get(0).pt1;
-                            isDone = true;
-                            return false;
-
-                        } else if (thirty.size() > 0){
-                            thirty.sort(new ThreeJudgeComparator());
-                            move(currentStep, thirty.get(0).pt1);
-                            currentStep = thirty.get(0).pt1;
-                            isDone = true;
-                            return false;
-
-                        } else {
-                            twenty.sort(new ThreeJudgeComparator());
-                            move(currentStep, twenty.get(0).pt1);
-                            currentStep = twenty.get(0).pt1;
-                            isDone = true;
-                            return false;
-
+                            move(forty.get(0).pt1, forty.get(0).pt2);
+                            currentStep = forty.get(0).pt2;
+                            return true;
                         }
-                    }
-                    else {
-                        return false;
-                    }
-                }
-            }
-        }
+                    } else {
+                        // choose 1 from 3
+                        if (active_targets.get(2)==6 && !hasScan){
+                            active_targets.set(2, 7);
 
-        if (!isDone){
-            List<ThreeJudge> goThree = new ArrayList<>();
-            List<ThreeJudge> goTwo = new ArrayList<>();
-            List<ThreeJudge> goOne = new ArrayList<>();
-            ThreeJudge a = new ThreeJudge(active_targets.get(0), active_targets.get(1), active_targets.get(2), TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)]);
-            ThreeJudge b = new ThreeJudge(active_targets.get(0), active_targets.get(2), active_targets.get(1), TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)]);
-            ThreeJudge c = new ThreeJudge(active_targets.get(1), active_targets.get(0), active_targets.get(2), TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)]);
-            ThreeJudge d = new ThreeJudge(active_targets.get(1), active_targets.get(2), active_targets.get(0), TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(0)]);
-            ThreeJudge e = new ThreeJudge(active_targets.get(2), active_targets.get(0), active_targets.get(1), TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)]);
-            ThreeJudge f = new ThreeJudge(active_targets.get(2), active_targets.get(1), active_targets.get(0), TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)]);
+                            a.time = TravelTime[currentStep][active_targets.get(0)];
+                            c.time = TravelTime[currentStep][active_targets.get(1)];
+                            e.time = TravelTime[currentStep][active_targets.get(2)];
 
-            goThree.add(a);
-            goThree.add(b);
-            goThree.add(c);
-            goThree.add(d);
-            goThree.add(e);
-            goThree.add(f);
+                            goOne.add(a);
+                            goOne.add(c);
+                            goOne.add(e);
 
-
-            // 判斷時間內來不來得及走3個點後走到終點
-            for(int i=5; i>=0; i--){
-                if(goThree.get(i).time >= api.getTimeRemaining().get(0) || goThree.get(i).time + TravelTime[goThree.get(i).pt3][8] > api.getTimeRemaining().get(1)){
-                    goThree.remove(i);
-                }
-            }
-
-            // 來得及走 3 個點
-            if (goThree.size() > 0){
-
-                goThree.sort(new ThreeJudgeComparator());
-                move(currentStep, goThree.get(0).pt1);
-                move(goThree.get(0).pt1, goThree.get(0).pt2);
-                move(goThree.get(0).pt2, goThree.get(0).pt3);
-                currentStep = goThree.get(0).pt3;
-
-                return true;
-
-
-            } else {
-                //  choose 2 from 3，時間內只能從 phase 中的 3 個點挑 2 個出來走
-                a.time = TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(1)];
-                b.time = TravelTime[currentStep][active_targets.get(0)]+TravelTime[active_targets.get(0)][active_targets.get(2)];
-                c.time = TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(0)];
-                d.time = TravelTime[currentStep][active_targets.get(1)]+TravelTime[active_targets.get(1)][active_targets.get(2)];
-                e.time = TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(0)];
-                f.time = TravelTime[currentStep][active_targets.get(2)]+TravelTime[active_targets.get(2)][active_targets.get(1)];
-
-                goTwo.add(a);
-                goTwo.add(b);
-                goTwo.add(c);
-                goTwo.add(d);
-                goTwo.add(e);
-                goTwo.add(f);
-
-
-
-
-                for(int i=5; i>=0; i--){
-                    if (goTwo.get(i).time + TravelTime[goTwo.get(i).pt2][8] > api.getTimeRemaining().get(1)){
-                        goTwo.remove(i);
-                    }
-                }
-
-                if(goTwo.size()>0){
-                    List<ThreeJudge> seventy = new ArrayList<>();
-                    List<ThreeJudge> sixty = new ArrayList<>();
-                    List<ThreeJudge> fifty = new ArrayList<>();
-                    List<ThreeJudge> forty = new ArrayList<>();
-
-                    for (int i=0; i<goTwo.size(); i++){
-                        if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 70){
-                            seventy.add(goTwo.get(i));
-                        } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 60){
-                            sixty.add(goTwo.get(i));
-                        } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 50){
-                            fifty.add(goTwo.get(i));
-                        } else if (score[goTwo.get(i).pt1] + score[goTwo.get(i).pt2] == 40){
-                            forty.add(goTwo.get(i));
-                        }
-                    }
-
-                    if (seventy.size() > 0){
-                        seventy.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++){
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)){
-                                if (120000 + TravelTime[seventy.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)){
-                                    move(currentStep, seventy.get(0).pt1);
-                                    move(seventy.get(0).pt1, seventy.get(0).pt2);
-                                    currentStep = seventy.get(0).pt2;
-                                    while (api.getTimeRemaining().get(0) < 119000){
-                                        waiting(10);
-                                    }
-                                    return true;
+                            for(int i=2; i>=0; i--){
+                                if (goOne.get(i).time + TravelTime[goOne.get(i).pt1][8] > api.getTimeRemaining().get(1)){  // && 120000 + TravelTime[goTwo.get(i).pt2][8] > api.getTimeRemaining().get(1)){
+                                    goOne.remove(i);
                                 }
                             }
-                        }
 
-                        move(currentStep, seventy.get(0).pt1);
-                        move(seventy.get(0).pt1, seventy.get(0).pt2);
-                        currentStep = seventy.get(0).pt2;
-                        return false;
+                            if (goOne.size() > 0){
+                                List<ThreeJudge> fifty = new ArrayList<>();
+                                List<ThreeJudge> forty = new ArrayList<>();
+                                List<ThreeJudge> thirty = new ArrayList<>();
+                                List<ThreeJudge> twenty = new ArrayList<>();
 
-                    } else if (sixty.size() > 0){
-                        sixty.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++) {
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
-                                if (120000 + TravelTime[sixty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
-                                    move(currentStep, sixty.get(0).pt1);
-                                    move(sixty.get(0).pt1, sixty.get(0).pt2);
-                                    currentStep = sixty.get(0).pt2;
-                                    while (api.getTimeRemaining().get(0) < 119000){
-                                        waiting(10);
+                                for (int i=0; i<2; i++){
+                                    if (score[active_targets.get(i)] == 50){
+                                        fifty.add(goOne.get(i));
+                                    } else if (score[active_targets.get(i)] == 40){
+                                        forty.add(goOne.get(i));
+                                    } else if (score[active_targets.get(i)] == 30){
+                                        thirty.add(goOne.get(i));
+                                    } else if (score[active_targets.get(i)] == 20){
+                                        twenty.add(goOne.get(i));
                                     }
-                                    return true;
                                 }
-                            }
-                        }
 
-                        move(currentStep, sixty.get(0).pt1);
-                        move(sixty.get(0).pt1, sixty.get(0).pt2);
-                        currentStep = sixty.get(0).pt2;
-                        return false;
-                    } else if (fifty.size() > 0){
-                        fifty.sort(new ThreeJudgeComparator());
-
-                        for (int i=0; i<7; i++) {
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
-                                if (120000 + TravelTime[fifty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
+                                if (fifty.size() > 0){
+                                    fifty.sort(new ThreeJudgeComparator());
                                     move(currentStep, fifty.get(0).pt1);
-                                    move(fifty.get(0).pt1, fifty.get(0).pt2);
-                                    currentStep = fifty.get(0).pt2;
-                                    while (api.getTimeRemaining().get(0) < 119000){
-                                        waiting(10);
-                                    }
-                                    return true;
-                                }
-                            }
-                        }
+                                    currentStep = fifty.get(0).pt1;
+                                    hasScan = true;
 
-                        move(currentStep, fifty.get(0).pt1);
-                        move(fifty.get(0).pt1, fifty.get(0).pt2);
-                        currentStep = fifty.get(0).pt2;
-                        return false;
-                    } else if (forty.size() > 0){
-                        forty.sort(new ThreeJudgeComparator());
+                                    return false;
 
-                        for (int i=0; i<7; i++) {
-                            if (i != active_targets.get(0) && i != active_targets.get(1) && i != active_targets.get(2)) {
-                                if (120000 + TravelTime[forty.get(0).pt2][i] + TravelTime[i][8] < api.getTimeRemaining().get(1)) {
+                                } if (forty.size() > 0){
+                                    forty.sort(new ThreeJudgeComparator());
                                     move(currentStep, forty.get(0).pt1);
-                                    move(forty.get(0).pt1, forty.get(0).pt2);
-                                    currentStep = forty.get(0).pt2;
-                                    while (api.getTimeRemaining().get(0) < 119000){
-                                        waiting(10);
+                                    currentStep = forty.get(0).pt1;
+
+                                    return false;
+
+                                } else if (thirty.size() > 0){
+                                    thirty.sort(new ThreeJudgeComparator());
+                                    move(currentStep, thirty.get(0).pt1);
+                                    currentStep = thirty.get(0).pt1;
+
+                                    return false;
+
+                                } else {
+                                    twenty.sort(new ThreeJudgeComparator());
+                                    move(currentStep, twenty.get(0).pt1);
+                                    currentStep = twenty.get(0).pt1;
+
+                                    return false;
+
+                                }
+                            }
+                        } else {
+                            // choose 1 from 3
+                            // 這裡沒有加上時間
+
+                            a.time = TravelTime[currentStep][active_targets.get(0)];
+                            c.time = TravelTime[currentStep][active_targets.get(1)];
+                            e.time = TravelTime[currentStep][active_targets.get(2)];
+
+                            goOne.add(a);
+                            goOne.add(c);
+                            goOne.add(e);
+
+                            for(int i=2; i>=0; i--){
+                                if (goOne.get(i).time + TravelTime[goOne.get(i).pt1][8] > api.getTimeRemaining().get(1)){  // && 120000 + TravelTime[goTwo.get(i).pt2][8] > api.getTimeRemaining().get(1)){
+                                    goOne.remove(i);
+                                }
+                            }
+
+                            if (goOne.size() > 0){
+                                List<ThreeJudge> forty = new ArrayList<>();
+                                List<ThreeJudge> thirty = new ArrayList<>();
+                                List<ThreeJudge> twenty = new ArrayList<>();
+
+                                for (int i=0; i<2; i++){
+                                    if (score[active_targets.get(i)] == 40){
+                                        forty.add(goOne.get(i));
+                                    } else if (score[active_targets.get(i)] == 30){
+                                        thirty.add(goOne.get(i));
+                                    } else if (score[active_targets.get(i)] == 20){
+                                        twenty.add(goOne.get(i));
                                     }
-                                    return true;
+                                }
+                                if (forty.size() > 0){
+                                    forty.sort(new ThreeJudgeComparator());
+                                    move(currentStep, forty.get(0).pt1);
+                                    currentStep = forty.get(0).pt1;
+
+                                    return false;
+
+                                } else if (thirty.size() > 0){
+                                    thirty.sort(new ThreeJudgeComparator());
+                                    move(currentStep, thirty.get(0).pt1);
+                                    currentStep = thirty.get(0).pt1;
+
+                                    return false;
+
+                                } else {
+                                    twenty.sort(new ThreeJudgeComparator());
+                                    move(currentStep, twenty.get(0).pt1);
+                                    currentStep = twenty.get(0).pt1;
+
+                                    return false;
+
                                 }
                             }
                         }
-
-                        move(currentStep, forty.get(0).pt1);
-                        move(forty.get(0).pt1, forty.get(0).pt2);
-                        currentStep = forty.get(0).pt2;
-                        return false;
-                    }
-                } else {
-                    // choose 1 from 3
-                    // 這裡沒有加上時間
-
-                    a.time = TravelTime[currentStep][active_targets.get(0)];
-                    c.time = TravelTime[currentStep][active_targets.get(1)];
-                    e.time = TravelTime[currentStep][active_targets.get(2)];
-
-                    goOne.add(a);
-                    goOne.add(c);
-                    goOne.add(e);
-
-                    for(int i=2; i>=0; i--){
-                        if (goOne.get(i).time + TravelTime[goOne.get(i).pt1][8] > api.getTimeRemaining().get(1)){  // && 120000 + TravelTime[goTwo.get(i).pt2][8] > api.getTimeRemaining().get(1)){
-                            goOne.remove(i);
-                        }
-                    }
-
-                    if (goOne.size() > 0){
-                        List<ThreeJudge> forty = new ArrayList<>();
-                        List<ThreeJudge> thirty = new ArrayList<>();
-                        List<ThreeJudge> twenty = new ArrayList<>();
-
-                        for (int i=0; i<2; i++){
-                            if (score[active_targets.get(i)] == 40){
-                                forty.add(goOne.get(i));
-                            } else if (score[active_targets.get(i)] == 30){
-                                thirty.add(goOne.get(i));
-                            } else if (score[active_targets.get(i)] == 20){
-                                twenty.add(goOne.get(i));
-                            }
-                        }
-                        if (forty.size() > 0){
-                            forty.sort(new ThreeJudgeComparator());
-                            move(currentStep, forty.get(0).pt1);
-                            currentStep = forty.get(0).pt1;
-
-                            return false;
-
-                        } else if (thirty.size() > 0){
-                            thirty.sort(new ThreeJudgeComparator());
-                            move(currentStep, thirty.get(0).pt1);
-                            currentStep = thirty.get(0).pt1;
-
-                            return false;
-
-                        } else {
-                            twenty.sort(new ThreeJudgeComparator());
-                            move(currentStep, twenty.get(0).pt1);
-                            currentStep = twenty.get(0).pt1;
-
-                            return false;
-
-                        }
-                    }
-                    else {
-                        return false;
                     }
                 }
             }
@@ -874,11 +787,14 @@ public class YourService extends KiboRpcService {
     public void doScan(){
         if(!hasScan){
             Mat usage = api.getMatNavCam();
-            api.saveMatImage(usage,"use");
-            qr = Qrcode(usage,350, 400, 700, 280, 1200, 1200);
+            qr = Qrcode(usage,350, 420, 700, 280, 1200, 1200);
+            Mat usage2 = api.getMatNavCam();
+            qr = Qrcode(usage2,350,420,700,280,1200,1200);
             if(qr!=""){
                 hasScan = true;
             }
+            api.saveMatImage(usage,"use");
+            api.saveMatImage(usage2,"use2");
         }
     }
 
@@ -944,9 +860,7 @@ public class YourService extends KiboRpcService {
 
 
     private void LaserAndTakePhoto(int id) {
-        Result result;
-
-        result = api.laserControl(true);
+        Result result = api.laserControl(true);
 
         if (result == null){
             if (id == 1){
@@ -1008,8 +922,6 @@ public class YourService extends KiboRpcService {
     }
 
     private void move(int start, int end){
-        Result result;
-
         if (start == 0 && end == 1){
             api.moveTo(A, Q6, false);
             api.moveTo(B, Q1, false);
@@ -1098,7 +1010,7 @@ public class YourService extends KiboRpcService {
             api.moveTo(AP6, Q6, false);
             LaserAndTakePhoto(6);
         } else if (start == 2 && end == 7){
-            api.moveTo(TwoToSix, Q6, false);
+            api.moveTo(TwoToSix, Q7, false);
             api.moveTo(AP6, Q7, false);
             doScan();
             if (active_targets.contains(6) || active_targets.contains(7)){
@@ -1131,7 +1043,7 @@ public class YourService extends KiboRpcService {
             api.moveTo(AP6, Q6, false);
             LaserAndTakePhoto(6);
         } else if (start == 3 && end == 7){
-            api.moveTo(ThreeToSix_1, Q6, false);
+            api.moveTo(ThreeToSix_1, Q7, false);
             api.moveTo(AP6, Q7, false);
             doScan();
             if (active_targets.contains(6) || active_targets.contains(7)){
@@ -1159,7 +1071,7 @@ public class YourService extends KiboRpcService {
             api.moveTo(AP6, Q6, false);
             LaserAndTakePhoto(6);
         } else if (start == 4 && end == 7){
-            api.moveTo(FourToSix_1, Q6, false);
+            api.moveTo(FourToSix_1, Q7, false);
             api.moveTo(AP6, Q7, false);
             doScan();
             if (active_targets.contains(6) || active_targets.contains(7)){
@@ -1172,7 +1084,7 @@ public class YourService extends KiboRpcService {
             api.moveTo(AP1, Q1, false);
             LaserAndTakePhoto(1);
         } else if (start == 5 && end == 2){
-            api.moveTo(TwoToFive, Q2, false);
+            api.moveTo(TwoToFive, Q5, false);
             api.moveTo(AP2, Q2, false);
             LaserAndTakePhoto(2);
         } else if (start == 5 && end == 3){
@@ -1188,7 +1100,7 @@ public class YourService extends KiboRpcService {
             api.moveTo(AP6, Q6, false);
             LaserAndTakePhoto(6);
         } else if (start == 5 && end == 7){
-            api.moveTo(FiveToSix, Q6, false);
+            api.moveTo(FiveToSix, Q5, false);
             api.moveTo(AP6, Q7, false);
             doScan();
             if (active_targets.contains(6) || active_targets.contains(7)){
@@ -1233,11 +1145,11 @@ public class YourService extends KiboRpcService {
             api.moveTo(AP2, Q2, false);
             LaserAndTakePhoto(2);
         } else if (start == 7 && end == 3){
-            api.moveTo(ThreeToSix_1, Q3, false);
+            api.moveTo(ThreeToSix_1, Q7, false);
             api.moveTo(AP3, Q3, false);
             LaserAndTakePhoto(3);
         } else if (start == 7 && end == 4){
-            api.moveTo(FourToSix_1, Q6, false);
+            api.moveTo(FourToSix_1, Q4, false);
             api.moveTo(AP4, Q4, false);
             LaserAndTakePhoto(4);
         } else if (start == 7 && end == 5){
